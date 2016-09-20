@@ -24,7 +24,7 @@ import enums.Terrain;
  * publishing their code examples
  */
 
-public class ROVER_01 {
+public class ROVER_01{
 
 	BufferedReader in;
 	PrintWriter out;
