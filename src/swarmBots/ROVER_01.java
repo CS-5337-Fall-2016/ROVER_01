@@ -234,7 +234,7 @@ public class ROVER_01 {
 							stepCount = 5;  //side stepping
 						} else {
 							// request to server to move
-							out.println("MOVE S");
+							out.println("MOVE E");
 							//System.out.println("ROVER_01 request move S");
 						}
 						
