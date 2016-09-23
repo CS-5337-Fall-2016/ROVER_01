@@ -347,7 +347,7 @@ public class ROVER_01 {
 		String jsonEqListString = jsonEqList.toString();		
 		ArrayList<String> returnList;		
 		returnList = gson.fromJson(jsonEqListString, new TypeToken<ArrayList<String>>(){}.getType());		
-		//System.out.println("ROVER_01 returnList " + returnList);
+		System.out.println("ROVER_01 returnList " + returnList);
 		
 		return returnList;
 	}
