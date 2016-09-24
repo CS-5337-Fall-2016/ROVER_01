@@ -65,7 +65,7 @@ public class SearchLogic {
                             open.remove(n);  // also update from open list
                             open.add(n);
                             parentMemory.put(n, u); // add in parent
-                        }
+                          }
 
 
                     } else {
