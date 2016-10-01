@@ -226,9 +226,10 @@ public class ROVER_01 {
 						// check scanMap to see if path is blocked to the south
 						// (scanMap may be old data by now)
 						if (scanMapTiles[centerIndex][centerIndex +1].getHasRover() 
-								|| scanMapTiles[centerIndex][centerIndex +1].getTerrain() == Terrain.ROCK
+								|| scanMapTiles[centerIndex][centerIndex +1].getTerrain() == Terrain.SOIL
 								|| scanMapTiles[centerIndex][centerIndex +1].getTerrain() == Terrain.SAND
-								|| scanMapTiles[centerIndex][centerIndex +1].getTerrain() == Terrain.NONE) {
+								|| scanMapTiles[centerIndex][centerIndex +1].getTerrain() == Terrain.GRAVEL
+								|| scanMapTiles[centerIndex][centerIndex -1].getTerrain() == Terrain.NONE) {
 							blocked = true;
 							stepCount = 5;  //side stepping
 						} else {
@@ -246,6 +247,7 @@ public class ROVER_01 {
 						if (scanMapTiles[centerIndex][centerIndex -1].getHasRover() 
 								|| scanMapTiles[centerIndex][centerIndex -1].getTerrain() == Terrain.ROCK
 								|| scanMapTiles[centerIndex][centerIndex -1].getTerrain() == Terrain.SAND
+								|| scanMapTiles[centerIndex][centerIndex -1].getTerrain() == Terrain.GRAVEL
 								|| scanMapTiles[centerIndex][centerIndex -1].getTerrain() == Terrain.NONE) {
 							blocked = true;
 							stepCount = 5;  //side stepping
