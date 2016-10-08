@@ -251,7 +251,9 @@ public class ROVER_01{
 							stepCount = 5;  //side stepping
 						} else {
 							// request to server to move
+							
 							out.println("MOVE E");
+
 							//System.out.println("ROVER_01 request move N");
 						}					
 					}
@@ -277,9 +279,12 @@ public class ROVER_01{
 				System.out.println("ROVER_01 blocked test " + blocked);
 	
 				// TODO - logic to calculate where to move next
+<<<<<<< HEAD
 				if (blocked){
 					out.println("MOVE S");
 				}
+=======
+>>>>>>> master
 	
 				
 				// this is the Rovers HeartBeat, it regulates how fast the Rover cycles through the control loop
