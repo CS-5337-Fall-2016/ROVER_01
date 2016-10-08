@@ -279,12 +279,11 @@ public class ROVER_01{
 				System.out.println("ROVER_01 blocked test " + blocked);
 	
 				// TODO - logic to calculate where to move next
-<<<<<<< HEAD
+
 				if (blocked){
 					out.println("MOVE S");
 				}
-=======
->>>>>>> master
+
 	
 				
 				// this is the Rovers HeartBeat, it regulates how fast the Rover cycles through the control loop
