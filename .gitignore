@@ -22,3 +22,5 @@
 !*.txt
 
 #but do ignore this file
+
+src/.DS_Store
