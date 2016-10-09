@@ -284,6 +284,16 @@ public class ROVER_01{
 
 				if (blocked){
 					out.println("MOVE S");
+					MapTile[][] scanMapTiles = scanMap.getScanMap();
+					int centerIndex = (scanMap.getEdgeSize() - 1)/2;
+					if(scanMapTiles[centerIndex][centerIndex -1].getTerrain() == Terrain.ROCK)
+					{ stepCount=-5;
+					   if(blocked){
+						out.println("MOVE N");
+						
+					   }
+					}
+					
 				}
 
 	
