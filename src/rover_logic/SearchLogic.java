@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 package rover_logic;
 
 import common.Coord;
@@ -382,4 +381,4 @@ public class SearchLogic {
 
 
 }
->>>>>>> master
+
