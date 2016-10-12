@@ -14,9 +14,6 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 
-/**
- * Created by samskim on 5/12/16.
- */
 public class Communication {
 
     private String url;
