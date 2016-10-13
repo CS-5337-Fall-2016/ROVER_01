@@ -1,4 +1,4 @@
-package testUtillities;
+package testUtilities;
 
 import common.Rover;
 import enums.RoverName;

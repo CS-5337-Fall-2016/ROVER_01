@@ -1,4 +1,4 @@
-package testUtillities;
+package testUtilities;
 
 public class TimeValueExperiment {
 	public static void main(String[] args) {

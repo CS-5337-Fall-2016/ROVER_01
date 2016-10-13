@@ -1,4 +1,4 @@
-package testUtillities;
+package testUtilities;
 
 
 import javax.swing.SwingUtilities;
