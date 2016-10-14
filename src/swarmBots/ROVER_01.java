@@ -273,7 +273,7 @@ public class ROVER_01 {
                         if (search.validateTile(globalMap.get(destination), RoverDriveType.TREADS)) {
                             System.out.println("Target Reachable");
                         } else {
-                            // Target is not walkable (hasRover, or sand)
+                            // Target is not walkable (hasRover, or ROCK)
                             // then go to next destination, push current destination to end
                             // TODO: handle the case when the destiation is blocked permanently
                             // TODO: also, what if the destination is already taken? update globalMap and dont go there
@@ -416,8 +416,8 @@ public class ROVER_01 {
             if (!globalMap.containsKey(coord)) {
                 MapTile tile = CommunicationHelper.convertToMapTile(jsonObj);
 
-                // if tile has science AND is not in sand
-                if (tile.getScience() != Science.NONE && tile.getTerrain() != Terrain.SAND) {
+                // if tile has science AND is not in ROCK
+                if (tile.getScience() != Science.NONE && tile.getTerrain() != Terrain.ROCK) {
 
                     // then add to the destination
                     if (!destinations.contains(coord) && !marked)
