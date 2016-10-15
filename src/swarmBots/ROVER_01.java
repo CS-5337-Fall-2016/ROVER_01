@@ -294,7 +294,7 @@ public class ROVER_01 {
                     // 1. we are at the destination
                     // 2. blocked? error?
                 } else {
-                    // check if rover is at the destination, drill
+                    // check if rover is at the destination, harvest
                     if (currentLoc.equals(destination)) {
                         out.println("GATHER");
                         System.out.println(rovername + " arrived destination. Now gathering.");
@@ -495,7 +495,7 @@ public class ROVER_01 {
 
         if (jsonScanMapIn.startsWith("SCAN")) {
             while (!(jsonScanMapIn = in.readLine()).equals("SCAN_END")) {
-                //System.out.println("ROVER_01 incomming SCAN result: " + jsonScanMapIn);
+                //System.out.println("ROVER_01 incoming SCAN result: " + jsonScanMapIn);
                 jsonScanMap.append(jsonScanMapIn);
                 jsonScanMap.append("\n");
                 //System.out.println("ROVER_01 doScan() bottom of while");
