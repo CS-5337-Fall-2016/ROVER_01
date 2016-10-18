@@ -118,7 +118,7 @@ public class ROVER_01 {
         out.println("START_LOC");
         line = in.readLine();
         if (line == null) {
-            System.out.println(rovername + " check connection to server");
+            System.out.println(rovername + " checking either it is connected to the server or not");
             line = "";
         }
         if (line.startsWith("START_LOC")) {
@@ -131,7 +131,7 @@ public class ROVER_01 {
         out.println("TARGET_LOC");
         line = in.readLine();
         if (line == null) {
-            System.out.println(rovername + " check connection to server");
+            System.out.println(rovername + " checking either it is connected to the server ");
             line = "";
         }
         if (line.startsWith("TARGET_LOC")) {
@@ -231,7 +231,8 @@ public class ROVER_01 {
             // if jackpot visible
             if (search.targetVisible(currentLoc, targetLocation)) {
                 out.println("GATHER");
-                if (!beenToJackpot){
+                if (!beenToJackpot)
+                {
                     beenToJackpot = true;
                     addJackPotDestinations(targetLocation);
                 }
@@ -395,7 +396,7 @@ public class ROVER_01 {
                 globalMap.put(coord, mapTile);
             }
         }
-        // put my current position so it is walkable
+        
         MapTile currentMapTile = scanMapTiles[centerIndex][centerIndex].getCopyOfMapTile();
         currentMapTile.setHasRoverFalse();
         globalMap.put(currentLoc, currentMapTile);

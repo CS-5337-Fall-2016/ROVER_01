@@ -176,6 +176,7 @@ public class SearchLogic {
         if (terrain == Terrain.ROCK) {
             if (drive == RoverDriveType.TREADS || drive == RoverDriveType.WHEELS) return false;
         }
+        
         return true;
     }
 
