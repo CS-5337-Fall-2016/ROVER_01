@@ -430,7 +430,7 @@ public class PaintMapUtility {
 			printMap.append("| " + rowCount++ + "\n"); // Print row numbers at end of row
 			for (int k = 0; k < mapWidth; k++) {
 				Coord tcor = new Coord(k, j);
-				if (planetMap.getTile(tcor).getTerrain() != Terrain.SOIL) {
+				if (planetMap.getTile(tcor).getTerrain() != Terrain.ROCK) {
 					printMap.append("|");
 					printMap.append(planetMap.getTile(tcor).getTerrain().getTerString());
 					if (scienceLocations.checkLocation(tcor)) {
@@ -439,7 +439,7 @@ public class PaintMapUtility {
 						printMap.append("_");
 					}
 
-				} else if (planetMap.getTile(tcor).getTerrain() == Terrain.SOIL) {
+				} else if (planetMap.getTile(tcor).getTerrain() == Terrain.ROCK) {
 					printMap.append("|_");
 					if (scienceLocations.checkLocation(tcor)) {
 						printMap.append(scienceLocations.scanLocation(tcor).getSciString());

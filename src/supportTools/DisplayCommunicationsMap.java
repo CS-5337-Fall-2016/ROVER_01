@@ -83,21 +83,21 @@ public class DisplayCommunicationsMap {
 	        			System.out.print("~ ");
 	        		 
 	        			//check and print edge of map has first priority
-	        		} else if(tempTile.getTerrain().toString().equals("NONE")){
+	        		} else if(tempTile.getTerrain().toString().equals("CRYSTAL")){
 	    					System.out.print("XX");
 	    					
     				// next most important - print terrain and/or science locations
     					//terrain and science
-    				} else if(!(tempTile.getTerrain().toString().equals("SOIL"))
-    						&& !(tempTile.getScience().toString().equals("NONE"))){
+    				} else if(!(tempTile.getTerrain().toString().equals("ROCK"))
+    						&& !(tempTile.getScience().toString().equals("CRYSTAL"))){
     					// has both terrain and science
     					
     					System.out.print(tempTile.getTerrain().toString().substring(0,1) + tempTile.getScience().getSciString());
     					//just terrain
-    				} else if(!(tempTile.getTerrain().toString().equals("SOIL"))){
+    				} else if(!(tempTile.getTerrain().toString().equals("ROCK"))){
     					System.out.print(tempTile.getTerrain().toString().substring(0,1) + " ");
     					//just science
-    				} else if(!(tempTile.getScience().toString().equals("NONE"))){
+    				} else if(!(tempTile.getScience().toString().equals("CRYSTAL"))){
     					System.out.print(" " + tempTile.getScience().getSciString());
     					
     				// if still empty check for rovers and print them

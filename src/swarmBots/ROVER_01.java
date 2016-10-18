@@ -158,7 +158,7 @@ public class ROVER_01 {
         long estimatedTime;
         long sleepTime2;
 
-        // Get destinations from Sensor group. I am a driller!
+        // Get destinations from Sensor group. I am a harvester!
         List<Coord> blockedDestinations = new ArrayList<>();
 
 
@@ -417,7 +417,7 @@ public class ROVER_01 {
                 MapTile tile = CommunicationHelper.convertToMapTile(jsonObj);
 
                 // if tile has science AND is not in ROCK
-                if (tile.getScience() != Science.NONE && tile.getTerrain() != Terrain.ROCK) {
+                if (tile.getScience() != Science.CRYSTAL && tile.getTerrain() != Terrain.ROCK) {
 
                     // then add to the destination
                     if (!destinations.contains(coord) && !marked)
@@ -458,7 +458,7 @@ public class ROVER_01 {
                 if (jsonEqListIn == null) {
                     break;
                 }
-                //System.out.println("ROVER_01 incomming EQUIPMENT result: " + jsonEqListIn);
+                //System.out.println("ROVER_01 incoming EQUIPMENT result: " + jsonEqListIn);
                 jsonEqList.append(jsonEqListIn);
                 jsonEqList.append("\n");
                 //System.out.println("ROVER_01 doScan() bottom of while");
