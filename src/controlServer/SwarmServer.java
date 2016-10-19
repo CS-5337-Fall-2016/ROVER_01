@@ -133,9 +133,12 @@ public class SwarmServer {
 //**			GUIdisplay.createAndShowGui(myWorker, mainPanel);
 				//GUIdisplay2.createAndShowGui(myWorker2, mainPanel2);
 				GUIdisplay3.createAndShowGui(myWorker3, mainPanel3);
-				try {
+				try
+				{
 					updateGUIDisplay();
-				} catch (Exception e) {				
+				}
+				catch (Exception e)
+				{				
 					e.printStackTrace();
 				}
 			}
