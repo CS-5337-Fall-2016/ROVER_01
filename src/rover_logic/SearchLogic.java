@@ -1,3 +1,4 @@
+
 package rover_logic;
 
 import common.Coord;
@@ -15,9 +16,7 @@ import java.util.Set;
 import enums.RoverDriveType;
 import enums.Terrain;
 
-/**
- * Created by samskim on 5/12/16.
- */
+
 public class SearchLogic {
     // ******* Search Methods
 
@@ -65,7 +64,7 @@ public class SearchLogic {
                             open.remove(n);  // also update from open list
                             open.add(n);
                             parentMemory.put(n, u); // add in parent
-                        }
+                          }
 
 
                     } else {

@@ -2,9 +2,7 @@ package rover_logic;
 
 import common.Coord;
 
-/**
- * Created by samskim on 5/12/16.
- */
+
 // Node class for Astar search
 public class Node implements Comparable<Node> {
     private Coord coord;

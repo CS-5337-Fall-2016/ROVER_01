@@ -29,9 +29,7 @@ import enums.Terrain;
 import rover_logic.SearchLogic;
 import supportTools.CommunicationHelper;
 
-/**
- * Created by samskim on 4/21/16.
- */
+
 public class ROVER_11 {
 
     BufferedReader in;
