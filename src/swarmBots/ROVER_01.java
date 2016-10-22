@@ -1,17 +1,13 @@
 package swarmBots;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-
 import common.Communication;
 import common.Coord;
 import common.MapTile;
 import common.ScanMap;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -22,7 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-
 import enums.RoverDriveType;
 import enums.Science;
 import enums.Terrain;
@@ -31,23 +26,27 @@ import supportTools.CommunicationHelper;
 
 public class ROVER_01 {
 
-    BufferedReader in;
-    PrintWriter out;
-    String rovername;
-    ScanMap scanMap;
+ 
+    String rovernumber;
+    ScanMap mapscanner;
     int sleepTime;
-    String SERVER_ADDRESS = "localhost";
+    String SERVERIP_ADDRESS = "localhost";
     static final int PORT_ADDRESS = 9537;
     public static Map<Coord, MapTile> globalMap;
     List<Coord> destinations;
     long trafficCounter;
-    static final long treadDelay= TimeUnit.MILLISECONDS.toMillis(50);
+    BufferedReader in;
+    PrintWriter out;
+    /* BufferedReader inputstream;
+     * PrintWriter outputstream;
+     */
+    static final long treadDelay= TimeUnit.MILLISECONDS.toMillis(400);
 
     public ROVER_01() {
-        // constructor
-        rovername = "ROVER_01";
-        System.out.println(rovername + " rover object constructed");
-        SERVER_ADDRESS = "localhost";
+        
+        rovernumber = "ROVER_01";
+        System.out.println(rovernumber + " object created");
+        SERVERIP_ADDRESS = "localhost";
         // this should be a safe but slow timer value
         sleepTime = 300; // in milliseconds - smaller is faster, but the server will cut connection if it is too small
         globalMap = new HashMap<>();
@@ -56,10 +55,10 @@ public class ROVER_01 {
 
     public ROVER_01(String serverAddress) {
         // constructor
-        System.out.println(rovername + " rover object constructed");
-        rovername = "ROVER_01";
-        SERVER_ADDRESS = serverAddress;
-        sleepTime = 300; // in milliseconds - smaller is faster, but the server will cut connection if it is too small
+        System.out.println(rovernumber + " rover object constructed");
+        rovernumber = "ROVER_01";
+        SERVERIP_ADDRESS = serverAddress;
+        sleepTime = 200; // in milliseconds - smaller is faster, but the server will cut connection if it is too small
         globalMap = new HashMap<>();
         destinations = new ArrayList<>();
     }
@@ -73,9 +72,33 @@ public class ROVER_01 {
 
         // Make connection and initialize streams
         //TODO - need to close this socket
-        Socket socket = new Socket(SERVER_ADDRESS, PORT_ADDRESS); // set port here
-        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        out = new PrintWriter(socket.getOutputStream(), true);
+    	/* Socket soc = null;  
+         DataOutputStream outputstream = null;
+         DataInputStream inputstream = null;
+           PrintWriter outputstream;
+         
+             soc = new Socket(SERVERIP_ADDRESS,PORT_ADDRESS);
+             inputstream =  new BufferedReader( new InputStreamReader(soc.getInputStream()));
+             PrintWriter outpustream =new PrintWriter(soc.getOutputStream());
+             boolean r= true;
+             while (
+             {
+             String lineofrover =in.readLine();
+             if (lineofrover.startswith("SUBMITNAME")
+             {
+             System.out.println("rovernumber running on the line"+rovernumber");
+             }
+             else 
+             {
+             System.out.println("exception");
+             }
+             break;
+             }do(outputstream==true);
+             */
+             
+        Socket sock = new Socket(SERVERIP_ADDRESS, PORT_ADDRESS); // set port here
+        in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+        out = new PrintWriter(sock.getOutputStream(), true);
 
         //Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
@@ -84,7 +107,7 @@ public class ROVER_01 {
         while (true) {
             String line = in.readLine();
             if (line.startsWith("SUBMITNAME")) {
-                out.println(rovername); // This sets the name of this instance
+                out.println(rovernumber); // This sets the name of this instance
                 // of a swarmBot for identifying the
                 // thread to the server
                 break;
@@ -117,27 +140,29 @@ public class ROVER_01 {
         // **** Request START_LOC Location from SwarmServer ****
         out.println("START_LOC");
         line = in.readLine();
-        if (line == null) {
-            System.out.println(rovername + " check connection to server");
+        if (line == null)
+        {
+            System.out.println(rovernumber + " check connection to server");
             line = "";
         }
-        if (line.startsWith("START_LOC")) {
+        if (line.startsWith("START_LOC")) 
+        {
             rovergroupStartPosition = extractLocationFromString(line);
         }
-        System.out.println(rovername + " START_LOC " + rovergroupStartPosition);
+        System.out.println(rovernumber + " START_LOC " + rovergroupStartPosition);
 
 
         // **** Request TARGET_LOC Location from SwarmServer ****
         out.println("TARGET_LOC");
         line = in.readLine();
         if (line == null) {
-            System.out.println(rovername + " check connection to server");
+            System.out.println(rovernumber + " check connection to server");
             line = "";
         }
         if (line.startsWith("TARGET_LOC")) {
             targetLocation = extractLocationFromString(line);
         }
-        System.out.println(rovername + " TARGET_LOC " + targetLocation);
+        System.out.println(rovernumber + " TARGET_LOC " + targetLocation);
 
 
         // ******* destination *******
@@ -149,9 +174,9 @@ public class ROVER_01 {
         String url = "http://localhost:3000/api";
         String corp_secret = "gz5YhL70a2";
 
-        Communication com = new Communication(url, rovername, corp_secret);
+        Communication com = new Communication(url, rovernumber, corp_secret);
 
-        boolean beenToJackpot = false;
+        boolean beenTospotdestin = false;
         boolean ranSweep = false;
 
         long startTime;
@@ -182,14 +207,14 @@ public class ROVER_01 {
             out.println("LOC");
             line = in.readLine();
             if (line == null) {
-                System.out.println(rovername + " check connection to server");
+                System.out.println(rovernumber + " check connection to server");
                 line = "";
             }
             if (line.startsWith("LOC")) {
                 // loc = line.substring(4);
                 currentLoc = extractLocationFromString(line);
             }
-            System.out.println(rovername + " currentLoc at start: " + currentLoc);
+            System.out.println(rovernumber + " currentLoc at start: " + currentLoc);
 
             // after getting location set previous equal current to be able to check for stuckness and blocked later
             previousLoc = currentLoc;
@@ -199,16 +224,16 @@ public class ROVER_01 {
             ArrayList<String> equipment = new ArrayList<String>();
             equipment = getEquipment();
             //System.out.println("ROVER_01 equipment list results drive " + equipment.get(0));
-            System.out.println(rovername + " equipment list results " + equipment + "\n");
+            System.out.println(rovernumber + " equipment list results " + equipment + "\n");
 
 
             // ***** do a SCAN *****
             //System.out.println("ROVER_01 sending SCAN request");
             this.doScan();
-            scanMap.debugPrintMap();
+            mapscanner.debugPrintMap();
 
             // upon scan, update my field map
-            MapTile[][] scanMapTiles = scanMap.getScanMap();
+            MapTile[][] scanMapTiles = mapscanner.getScanMap();
             updateglobalMap(currentLoc, scanMapTiles);
 
             //***** communicating with the server
@@ -228,17 +253,17 @@ public class ROVER_01 {
 
             // ********** MOVING **********
 
-            // if jackpot visible
+            // if spotdestin visible
             if (search.targetVisible(currentLoc, targetLocation)) {
                 out.println("GATHER");
-                if (!beenToJackpot){
-                    beenToJackpot = true;
-                    addJackPotDestinations(targetLocation);
+                if (!beenTospotdestin){
+                    beenTospotdestin = true;
+                    addspotdestinDestinations(targetLocation);
                 }
             }
 
 
-            if (!beenToJackpot){
+            if (!beenTospotdestin){
                 destination = targetLocation;
             }
 
@@ -253,8 +278,8 @@ public class ROVER_01 {
 
             } else {
                 List<String> moves = search.Astar(currentLoc, destination, scanMapTiles, RoverDriveType.TREADS, globalMap);
-                System.out.println(rovername + "currentLoc: " + currentLoc + ", destination: " + destination);
-                System.out.println(rovername + " moves: " + moves.toString());
+                System.out.println(rovernumber + "currentLoc: " + currentLoc + ", destination: " + destination);
+                System.out.println(rovernumber + " moves: " + moves.toString());
 //
 
                 // if STILL MOVING
@@ -297,12 +322,13 @@ public class ROVER_01 {
                     // check if rover is at the destination, drill
                     if (currentLoc.equals(destination)) {
                         out.println("GATHER");
-                        System.out.println(rovername + " arrived destination. Now gathering.");
+                        System.out.println(rovernumber + " arrived destination. Now gathering.");
                         if (!destinations.isEmpty()) {
                             //remove from destinations
                             destinations.remove(destination);
                             destination = getClosestDestination(currentLoc);
-                            System.out.println(rovername + " going to next destination at: " + destination);
+                            
+                            System.out.println(rovernumber + " going to next destination at: " + destination);
                         } else {
                             System.out.println("Nowhere else to go. Relax..");
                         }
@@ -321,7 +347,7 @@ public class ROVER_01 {
             out.println("LOC");
             line = in.readLine();
             if (line == null) {
-                System.out.println(rovername + "ROVER_01 check connection to server");
+                System.out.println(rovernumber + "ROVER_01 check connection to server");
                 line = "";
             }
             if (line.startsWith("LOC")) {
@@ -337,7 +363,7 @@ public class ROVER_01 {
 //                destination = destinations.poll();
 //            }
             //System.out.println("ROVER_01 stuck test " + stuck);
-            //System.out.println(rovername + " blocked test " + blocked);
+            //System.out.println(rovernumber + " blocked test " + blocked);
 
             // TODO - logic to calculate where to move next
 
@@ -346,16 +372,18 @@ public class ROVER_01 {
             sleepTime2 = treadDelay - TimeUnit.NANOSECONDS.toMillis(estimatedTime);
             if (sleepTime2 > 0) Thread.sleep(sleepTime2);
 
-            System.out.println(rovername + " ------------ bottom process control --------------");
+            System.out.println(rovernumber + " ------------ bottom process control --------------");
         }
     }
 
-    private void addJackPotDestinations(Coord jackpot) {
-        int xp = jackpot.xpos-3;
-        int yp = jackpot.ypos-3;
+    private void addspotdestinDestinations(Coord spotdestin) {
+        int xp = spotdestin.xpos-3;
+        int yp = spotdestin.ypos-3;
 
-        for (int i = 0 ; i < 7; i = i + 6){
-            for (int j = 0; j < 7; j = j + 6){
+        for (int i = 0 ; i < 5; i = i + 4)
+        {
+            for (int j = 0; j < 5; j = j + 4)
+            {
                 Coord coord = new Coord(xp + i, yp + j);
                 destinations.add(coord);
             }
@@ -380,7 +408,7 @@ public class ROVER_01 {
 
 
     private void updateglobalMap(Coord currentLoc, MapTile[][] scanMapTiles) {
-        int centerIndex = (scanMap.getEdgeSize() - 1) / 2;
+        int centerIndex = (mapscanner.getEdgeSize() - 1) / 2;
 
         for (int row = 0; row < scanMapTiles.length; row++)
         {
@@ -414,17 +442,17 @@ public class ROVER_01 {
 
             // only bother to save if our globalMap doesn't contain the coordinate
             if (!globalMap.containsKey(coord)) {
-                MapTile tile = CommunicationHelper.convertToMapTile(jsonObj);
+                MapTile eachtile = CommunicationHelper.convertToMapTile(jsonObj);
 
                 // if tile has science AND is not in ROCK
-                if (tile.getScience() != Science.CRYSTAL && tile.getTerrain() != Terrain.ROCK) {
+                if (eachtile.getScience() == Science.CRYSTAL && eachtile.getTerrain() != Terrain.ROCK) {
 
                     // then add to the destination
                     if (!destinations.contains(coord) && !marked)
                         destinations.add(coord);
                 }
 
-                globalMap.put(coord, tile);
+                globalMap.put(coord, eachtile);
             }
         }
     }
@@ -482,20 +510,21 @@ public class ROVER_01 {
     // sends a SCAN request to the server and puts the result in the scanMap array
     public void doScan() throws IOException {
         //System.out.println("ROVER_01 method doScan()");
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gs = new GsonBuilder().setPrettyPrinting().create();
         out.println("SCAN");
 
         String jsonScanMapIn = in.readLine(); //grabs the string that was returned first
-        if (jsonScanMapIn == null) {
-            System.out.println(rovername + " check connection to server");
+        if (jsonScanMapIn == null) 
+        {
+            System.out.println(rovernumber + " check connection to server");
             jsonScanMapIn = "";
         }
         StringBuilder jsonScanMap = new StringBuilder();
-        System.out.println(rovername + " incomming SCAN result - first readline: " + jsonScanMapIn);
+        System.out.println(rovernumber + " incomming SCAN result - first readline: " + jsonScanMapIn);
 
         if (jsonScanMapIn.startsWith("SCAN")) {
             while (!(jsonScanMapIn = in.readLine()).equals("SCAN_END")) {
-                //System.out.println("ROVER_01 incomming SCAN result: " + jsonScanMapIn);
+                //System.out.println("ROVER_01 incoming SCAN result: " + jsonScanMapIn);
                 jsonScanMap.append(jsonScanMapIn);
                 jsonScanMap.append("\n");
                 //System.out.println("ROVER_01 doScan() bottom of while");
@@ -513,13 +542,14 @@ public class ROVER_01 {
 
         //System.out.println("ROVER_01 convert from json back to ScanMap class");
         // convert from the json string back to a ScanMap object
-        scanMap = gson.fromJson(jsonScanMapString, ScanMap.class);
+        mapscanner = gs.fromJson(jsonScanMapString, ScanMap.class);
     }
 
 
     // this takes the server response string, parses out the x and x values and
     // returns a Coord object
-    public static Coord extractLocationFromString(String sStr) {
+    public static Coord extractLocationFromString(String sStr)
+    {
         int indexOf;
         indexOf = sStr.indexOf(" ");
         sStr = sStr.substring(indexOf + 1);
@@ -537,14 +567,20 @@ public class ROVER_01 {
     /**
      * Runs the client
      */
-    public static void main(String[] args) throws Exception {
-        ROVER_01 client;
-        if (args.length > 0)
-            client = new ROVER_01(args[0]);
-        else {
-            client = new ROVER_01();
+    public static void main(String[] args) throws Exception
+    {
+        ROVER_01 host;
+        int k=args.length;
+        //It shows how the client runs.
+        if(k>0)
+        {
+        	host = new ROVER_01(args[0]);
         }
-        client.run();
+        else 
+        {
+            host = new ROVER_01();
+        }
+        host.run();
     }
 
 
