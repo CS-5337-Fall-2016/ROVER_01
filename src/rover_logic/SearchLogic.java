@@ -2,6 +2,7 @@
 package rover_logic;
 
 import common.Coord;
+
 import common.MapTile;
 
 import java.util.ArrayList;
@@ -16,8 +17,8 @@ import java.util.Set;
 import enums.RoverDriveType;
 import enums.Terrain;
 
-
-public class SearchLogic {
+public class SearchLogic{
+	
     // ******* Search Methods
 
     public List<String> Astar(Coord current, Coord dest, MapTile[][] scanMapTiles, RoverDriveType drive, Map<Coord, MapTile> globalMap) {
@@ -176,6 +177,7 @@ public class SearchLogic {
         if (terrain == Terrain.ROCK) {
             if (drive == RoverDriveType.TREADS || drive == RoverDriveType.WHEELS) return false;
         }
+        
         return true;
     }
 
