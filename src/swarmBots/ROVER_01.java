@@ -229,13 +229,13 @@ public class ROVER_01 {
             // ********** MOVING **********
 
             // if jackpot visible
-            if (search.targetVisible(currentLoc, targetLocation)) {
-                out.println("GATHER");
+          /*if (search.targetVisible(currentLoc, targetLocation)) {
+                //out.println("GATHER");
                 if (!beenToJackpot){
                     beenToJackpot = true;
                     addJackPotDestinations(targetLocation);
                 }
-            }
+            }*/
 
 
             if (!beenToJackpot){
@@ -295,19 +295,20 @@ public class ROVER_01 {
                     // 2. blocked? error?
                 } else {
                     // check if rover is at the destination, drill
-                    if (currentLoc.equals(destination)) {
-                        out.println("GATHER");
-                        System.out.println(rovername + " arrived destination. Now gathering.");
-                        if (!destinations.isEmpty()) {
+                    if (currentLoc.equals(destination)) 
+                    {
+                       // out.println("GATHER");
+                       // System.out.println(rovername + " arrived destination. Now gathering.");
+                      /*  if (!destinations.isEmpty()) {
                             //remove from destinations
                             destinations.remove(destination);
                             destination = getClosestDestination(currentLoc);
                             System.out.println(rovername + " going to next destination at: " + destination);
-                        } else {
-                            System.out.println("Nowhere else to go. Relax..");
-                        }
+                        } else {*/
+                            System.out.println("Nowhere else to go. Relax..");}
+                        
 
-                    } else {
+                     else {
 
                     }
                 }
@@ -417,7 +418,7 @@ public class ROVER_01 {
                 MapTile tile = CommunicationHelper.convertToMapTile(jsonObj);
 
                 // if tile has science AND is not in ROCK
-                if (tile.getScience() != Science.CRYSTAL && tile.getTerrain() != Terrain.ROCK) {
+                if (tile.getScience()== Science.CRYSTAL && tile.getTerrain() != Terrain.ROCK) {
 
                     // then add to the destination
                     if (!destinations.contains(coord) && !marked)
