@@ -305,10 +305,10 @@ public class ROVER_01 {
                             destination = getClosestDestination(currentLoc);
                             System.out.println(rovername + " going to next destination at: " + destination);
                         } else {*/
-                            System.out.println("Nowhere else to go. Relax..");
+                            System.out.println("Nowhere else to go. Relax..");}
                         
 
-                    } else {
+                     else {
 
                     }
                 }
