@@ -540,7 +540,7 @@ public class ROVER_01 {
      */
     public static void main(String[] args) throws Exception {
         ROVER_01 client;
-        if (args.length > 1)
+        if (args.length > 0)
             client = new ROVER_01(args[0]);
         else {
             client = new ROVER_01();
