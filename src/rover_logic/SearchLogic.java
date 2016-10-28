@@ -53,6 +53,33 @@ public class SearchLogic {
                     double h = getDistance(c, dest); // distance from neighbor to destination
                     double f = h + g; // total heuristic of this neighbor c
                     Node n = new Node(c, f);
+                  
+   /* Dijkstra's algorithm   set each w[i][j] = infinity
+   set each p[i][j] = (infinity, infinity)
+
+   set w[f_x(o_x)][f_y(o_y)] = 0
+   push (o_x, o_y) onto the priority queue, say pq.                     [**]
+
+   while (pop (x,y) from pq is possible)
+                                                                        [***]
+    foreach each square (x',y') adjacent to (x,y) and where
+        |x-o_x| <= DELTA and |y-o_y| <= DELTA
+     if w[f_x(x)][f_y(y)] + wt(x',y') < w[f_x(x')][f_y(y')] then
+      { we have found a new shortest path }
+      w[f_x(x')][f_y(y')] = w[f_x(x)][f_y(y)] + wt(x',y')
+      p[f_x(x')][f_y(y')] = (x,y)
+      push (x',y') onto the priority queue                      [**]
+      And you now have the shortest paths from (o_x,o_y) to every square in the range { o_x - DELTA, o_y - DELTA, o_x + DELTA, o_y + DELTA } and this will print the path from some point (x,y) to (o_x, o_y):
+      do
+      print (x,y)
+     (x,y) = p[f_x(x)][f_(y)]
+      while (x,y) != (infinity, infinity)
+      and any square, (x,y), which is not reachable from (o_x, o_y) will have:
+      p[f_x(x)][f_y(y)] = (infinity, infinity)
+     w[f_x(x)][f_y(y)] = infinity
+*/                    
+                            
+                    
 
                     // for back tracing, store in hashmap
                     if (distanceMemory.containsKey(n)) {
