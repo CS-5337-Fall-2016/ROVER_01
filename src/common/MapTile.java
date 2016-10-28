@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3320579a3d7a5fc4b616481a513e14a4e4d1845e
 package common;
 
 import enums.RoverName;
@@ -82,7 +86,11 @@ public class MapTile {
 		this.hasRover = false;
 	}
 	
-	public void setSciecne(Science sci){
+	public void setScience(Science sci){
 		this.science = sci;
 	}
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3320579a3d7a5fc4b616481a513e14a4e4d1845e

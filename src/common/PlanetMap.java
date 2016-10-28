@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3320579a3d7a5fc4b616481a513e14a4e4d1845e
 package common;
 
 public class PlanetMap {
@@ -95,7 +99,7 @@ public class PlanetMap {
 				
 				// check and add Science if on map
 				if(sciloc.checkLocation(tempCoord)){
-					aTile.setSciecne(sciloc.scanLocation(tempCoord));
+					aTile.setScience(sciloc.scanLocation(tempCoord));
 				}
 				tMap[i][j] = aTile;
 			}	
@@ -186,4 +190,8 @@ public class PlanetMap {
 	
 		this.planetMap[3][3] = new MapTile("S");
 	}
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 3320579a3d7a5fc4b616481a513e14a4e4d1845e
