@@ -41,7 +41,7 @@ public class ROVER_01 {
     public static Map<Coord, MapTile> globalMap;
     List<Coord> destinations;
     long trafficCounter;
-    static final long treadDelay= TimeUnit.MILLISECONDS.toMillis(50);
+    static final long treadDelay= TimeUnit.MILLISECONDS.toMillis(1230);
 
     public ROVER_01() {
         // constructor
