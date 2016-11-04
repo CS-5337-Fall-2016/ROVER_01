@@ -383,7 +383,8 @@ public class ROVER_01 {
 
                  //***** communicating with the server
                  System.out.println("post message: " + com.postScanMapTiles(currentLoc, scanMapTiles));
-                 if (trafficCounter % 5 == 0) {
+                 if (trafficCounter % 5 == 0) 
+                    {
                      updateglobalMap(com.getGlobalMap());
 
                      // ********* get closest destination from current location everytime
@@ -419,10 +420,11 @@ public class ROVER_01 {
                      if (!destinations.isEmpty()){
                          destination = getClosestDestination(currentLoc);
                      }
-                     out.println("GATHER");
+                     //out.println("GATHER");
 
                  } else {
                      List<String> moves = search.Astar(currentLoc, destination, scanMapTiles, RoverDriveType.TREADS, globalMap);
+                     
                      System.out.println(rovername + "currentLoc: " + currentLoc + ", destination: " + destination);
                      System.out.println(rovername + " moves: " + moves.toString());
      //
@@ -466,8 +468,8 @@ public class ROVER_01 {
                      } else {
                          // check if rover is at the destination, drill
                          if (currentLoc.equals(destination)) {
-                             out.println("GATHER");
-                             System.out.println(rovername + " arrived destination. Now gathering.");
+                            // out.println("GATHER");
+                            // System.out.println(rovername + " arrived destination. Now gathering.");
                              if (!destinations.isEmpty()) {
                                  //remove from destinations
                                  destinations.remove(destination);
