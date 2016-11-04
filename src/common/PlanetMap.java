@@ -1,11 +1,4 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 
->>>>>>> 3320579a3d7a5fc4b616481a513e14a4e4d1845e
-=======
-
->>>>>>> 8834193382fc81f56f9d7a577649ef5f5e0737fd
 package common;
 
 public class PlanetMap {
@@ -194,8 +187,4 @@ public class PlanetMap {
 	
 		this.planetMap[3][3] = new MapTile("S");
 	}
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 3320579a3d7a5fc4b616481a513e14a4e4d1845e

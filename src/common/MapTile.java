@@ -1,11 +1,4 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 
->>>>>>> 3320579a3d7a5fc4b616481a513e14a4e4d1845e
-=======
-
->>>>>>> 8834193382fc81f56f9d7a577649ef5f5e0737fd
 package common;
 
 import enums.RoverName;
@@ -94,7 +87,3 @@ public class MapTile {
 		this.science = sci;
 	}
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> 3320579a3d7a5fc4b616481a513e14a4e4d1845e
