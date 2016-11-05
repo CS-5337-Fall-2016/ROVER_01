@@ -105,7 +105,10 @@ public class ROVER_01 {
         cardinals[1] = "E";
         cardinals[2] = "S";
         cardinals[3] = "W";
-
+        cardinals[4] = "NE";
+        cardinals[5] = "NW";
+        cardinals[6] = "SE";
+        cardinals[7] = "SW";
         String currentDir = cardinals[0];
         Coord currentLoc = null;
         Coord previousLoc = null;
