@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import enums.RoverDriveType;
@@ -28,6 +29,7 @@ import enums.Science;
 import enums.Terrain;
 import rover_logic.SearchLogic;
 import supportTools.CommunicationHelper;
+
 
 public class ROVER_01 {
 
@@ -41,7 +43,7 @@ public class ROVER_01 {
     public static Map<Coord, MapTile> globalMap;
     List<Coord> destinations;
     long trafficCounter;
-    static final long treadDelay= TimeUnit.MILLISECONDS.toMillis(1250);
+    static final long TREADSDelay = TimeUnit.MILLISECONDS.toMillis(1230);
 
     public ROVER_01() {
         // constructor
@@ -146,6 +148,7 @@ public class ROVER_01 {
         SearchLogic search = new SearchLogic();
 
         // ******** define Communication
+//        String url = "http://192.168.1.104:3000/api";
         String url = "http://localhost:3000/api";
         String corp_secret = "gz5YhL70a2";
 
@@ -158,7 +161,7 @@ public class ROVER_01 {
         long estimatedTime;
         long sleepTime2;
 
-        // Get destinations from Sensor group. I am a harvester!
+        // Get destinations from Sensor group. I am a driller!
         List<Coord> blockedDestinations = new ArrayList<>();
 
 
@@ -171,12 +174,7 @@ public class ROVER_01 {
 
         // start Rover controller process
         while (true) {
-        	
-        	System.out.println("Enter 1 or 2; 1-navigationRover ,2-mappingRover");
-            BufferedReader inp = new BufferedReader (new InputStreamReader(System.in));
-             int ch= Integer.parseInt(inp.readLine());
-             
-             while(ch==1){
+
             startTime = System.nanoTime();
 
             // currently the requirements allow sensor calls to be made with no
@@ -224,6 +222,10 @@ public class ROVER_01 {
                 // ********* get closest destination from current location everytime
                 if (!destinations.isEmpty()) {
                     destination = getClosestDestination(currentLoc);
+                    
+                }else{
+                	destination = Randomove(currentLoc);
+                	com.postScanMapTiles(currentLoc, scanMapTiles);
                 }
 
             }
@@ -233,7 +235,14 @@ public class ROVER_01 {
 
             // ********** MOVING **********
 
-         
+            // if jackpot visible
+            if (search.targetVisible(currentLoc, targetLocation)) {
+                out.println("GATHER");
+                if (!beenToJackpot){
+                    beenToJackpot = true;
+                    addJackPotDestinations(targetLocation);
+                }
+            }
 
 
             if (!beenToJackpot){
@@ -247,7 +256,7 @@ public class ROVER_01 {
                 if (!destinations.isEmpty()){
                     destination = getClosestDestination(currentLoc);
                 }
-                //out.println("GATHER");
+                out.println("GATHER");
 
             } else {
                 List<String> moves = search.Astar(currentLoc, destination, scanMapTiles, RoverDriveType.TREADS, globalMap);
@@ -271,7 +280,7 @@ public class ROVER_01 {
                         if (search.validateTile(globalMap.get(destination), RoverDriveType.TREADS)) {
                             System.out.println("Target Reachable");
                         } else {
-                            // Target is not walkable (hasRover, or ROCK)
+                            // Target is not walkable (hasRover, or sand)
                             // then go to next destination, push current destination to end
                             // TODO: handle the case when the destiation is blocked permanently
                             // TODO: also, what if the destination is already taken? update globalMap and dont go there
@@ -293,10 +302,9 @@ public class ROVER_01 {
                     // 2. blocked? error?
                 } else {
                     // check if rover is at the destination, drill
-                    if (currentLoc.equals(destination)) 
-                    {
-                       // out.println("GATHER");
-                       // System.out.println(rovername + " arrived destination. Now gathering.");
+                    if (currentLoc.equals(destination)) {
+                        out.println("GATHER");
+                        System.out.println(rovername + " arrived destination. Now gathering.");
                         if (!destinations.isEmpty()) {
                             //remove from destinations
                             destinations.remove(destination);
@@ -304,9 +312,9 @@ public class ROVER_01 {
                             System.out.println(rovername + " going to next destination at: " + destination);
                         } else {
                             System.out.println("Nowhere else to go. Relax..");
-                        
+                        }
 
-                    }} else {
+                    } else {
 
                     }
                 }
@@ -327,197 +335,26 @@ public class ROVER_01 {
                 currentLoc = extractLocationFromString(line);
             }
 
-            stuck = currentLoc.equals(previousLoc);
+            //System.out.println("ROVER_01 currentLoc after recheck: " + currentLoc);
+            //System.out.println("ROVER_01 previousLoc: " + previousLoc);
 
+            // test for stuckness
+            stuck = currentLoc.equals(previousLoc);
+//            if (stuck){
+//                destination = destinations.poll();
+//            }
+            //System.out.println("ROVER_01 stuck test " + stuck);
+            //System.out.println(rovername + " blocked test " + blocked);
 
             // TODO - logic to calculate where to move next
 
 
             estimatedTime = System.nanoTime() - startTime;
-            sleepTime2 = treadDelay - TimeUnit.NANOSECONDS.toMillis(estimatedTime);
+            sleepTime2 = TREADSDelay - TimeUnit.NANOSECONDS.toMillis(estimatedTime);
             if (sleepTime2 > 0) Thread.sleep(sleepTime2);
 
             System.out.println(rovername + " ------------ bottom process control --------------");
         }
-     
-        	while(ch==2)
-        	{
-        		 startTime = System.nanoTime();
-
-                 // currently the requirements allow sensor calls to be made with no
-                 // simulated resource cost
-
-
-                 // **** location call ****
-                 out.println("LOC");
-                 line = in.readLine();
-                 if (line == null) {
-                     System.out.println(rovername + " check connection to server");
-                     line = "";
-                 }
-                 if (line.startsWith("LOC")) {
-                     // loc = line.substring(4);
-                     currentLoc = extractLocationFromString(line);
-                 }
-                 System.out.println(rovername + " currentLoc at start: " + currentLoc);
-
-                 // after getting location set previous equal current to be able to check for stuckness and blocked later
-                 previousLoc = currentLoc;
-
-
-                 // **** get equipment listing ****
-                 ArrayList<String> equipment = new ArrayList<String>();
-                 equipment = getEquipment();
-                 //System.out.println("ROVER_01 equipment list results drive " + equipment.get(0));
-                 System.out.println(rovername + " equipment list results " + equipment + "\n");
-
-
-                 // ***** do a SCAN *****
-                 //System.out.println("ROVER_01 sending SCAN request");
-                 this.doScan();
-                 scanMap.debugPrintMap();
-
-                 // upon scan, update my field map
-                 MapTile[][] scanMapTiles = scanMap.getScanMap();
-                 updateglobalMap(currentLoc, scanMapTiles);
-
-                 //***** communicating with the server
-                 System.out.println("post message: " + com.postScanMapTiles(currentLoc, scanMapTiles));
-                 if (trafficCounter % 5 == 0) 
-                    {
-                     updateglobalMap(com.getGlobalMap());
-
-                     // ********* get closest destination from current location everytime
-                     if (!destinations.isEmpty()) {
-                         destination = getClosestDestination(currentLoc);
-                     }
-
-                 }
-                 trafficCounter++;
-
-
-
-                 // ********** MOVING **********
-
-                 // if jackpot visible
-                 if (search.targetVisible(currentLoc, targetLocation)) {
-                    // out.println("GATHER");
-                     if (!beenToJackpot){
-                         beenToJackpot = true;
-                         addJackPotDestinations(targetLocation);
-                     }
-                 }
-
-
-                 if (!beenToJackpot){
-                     destination = targetLocation;
-                 }
-
-                 // if no destination, wait
-                 // TODO: use this time meaningfully
-                 if (destination == null){
-
-                     if (!destinations.isEmpty()){
-                         destination = getClosestDestination(currentLoc);
-                     }
-                     //out.println("GATHER");
-
-                 } else {
-                     List<String> moves = search.Astar(currentLoc, destination, scanMapTiles, RoverDriveType.TREADS, globalMap);
-                     
-                     System.out.println(rovername + "currentLoc: " + currentLoc + ", destination: " + destination);
-                     System.out.println(rovername + " moves: " + moves.toString());
-     //
-
-                     // if STILL MOVING
-                     if (!moves.isEmpty()) {
-                         out.println("MOVE " + moves.get(0));
-
-                         // if rover is next to the target
-                         // System.out.println("Rover near destiation. distance: " + getDistance(currentLoc, destination));
-                         if (search.targetVisible(currentLoc, destination)) {
-
-                             // server broke
-//                             com.markTileForGather(destination);
-                             System.out.println("Marked Target");
-
-                             // if destination is walkable
-                             if (search.validateTile(globalMap.get(destination), RoverDriveType.TREADS)) {
-                                 System.out.println("Target Reachable");
-                             } else {
-                                 // Target is not walkable (hasRover, or ROCK)
-                                 // then go to next destination, push current destination to end
-                                 // TODO: handle the case when the destiation is blocked permanently
-                                 // TODO: also, what if the destination is already taken? update globalMap and dont go there
-
-                                 // blocked destination is added to blockedDestianions queue
-                                 blockedDestinations.add(destination);
-
-                                 // move to new destination
-                                 destinations.remove(destination);
-                                 destination = getClosestDestination(currentLoc);
-                                 System.out.println("Target blocked. Switch target to: " + destination);
-                             }
-
-                         }
-
-
-                         // IF NO MORE MOVES, it can mean several things:
-                         // 1. we are at the destination
-                         // 2. blocked? error?
-                     } else {
-                         // check if rover is at the destination, drill
-                         if (currentLoc.equals(destination)) {
-                            // out.println("GATHER");
-                            // System.out.println(rovername + " arrived destination. Now gathering.");
-                             if (!destinations.isEmpty()) {
-                                 //remove from destinations
-                                 destinations.remove(destination);
-                                 destination = getClosestDestination(currentLoc);
-                                 System.out.println(rovername + " going to next destination at: " + destination);
-                             } else {
-                                 System.out.println("Nowhere else to go. Relax..");
-                             }
-
-                         } else {
-
-                         }
-                     }
-                 }
-
-
-                 System.out.println("destinations: " + destinations);
-
-
-                 // another call for current location
-                 out.println("LOC");
-                 line = in.readLine();
-                 if (line == null) {
-                     System.out.println(rovername + "ROVER_01 check connection to server");
-                     line = "";
-                 }
-                 if (line.startsWith("LOC")) {
-                     currentLoc = extractLocationFromString(line);
-                 }
-
-                 //System.out.println("ROVER_01 currentLoc after recheck: " + currentLoc);
-                 //System.out.println("ROVER_01 previousLoc: " + previousLoc);
-
-                 // test for stuckness
-                 stuck = currentLoc.equals(previousLoc);
-
-                 // TODO - logic to calculate where to move next
-
-
-                 estimatedTime = System.nanoTime() - startTime;
-                 sleepTime2 = treadDelay - TimeUnit.NANOSECONDS.toMillis(estimatedTime);
-                 if (sleepTime2 > 0) Thread.sleep(sleepTime2);
-
-                 System.out.println(rovername + " ------------ bottom process control --------------");
-             }
-         } 
-            
-
     }
 
     private void addJackPotDestinations(Coord jackpot) {
@@ -547,15 +384,24 @@ public class ROVER_01 {
         }
         return target;
     }
-
+    private Coord Randomove(Coord currentLoc){
+    	
+    	Random r = new Random();
+    	int RX = r.nextInt(50);
+    	int RY = r.nextInt(30);
+    	
+    	Coord newcoord = new Coord(RX, RY);
+    	
+    	if (newcoord.xpos== currentLoc.xpos || newcoord.ypos== currentLoc.ypos){
+    		newcoord = new Coord(RX, RY);
+    	} return newcoord;
+    }
 
     private void updateglobalMap(Coord currentLoc, MapTile[][] scanMapTiles) {
         int centerIndex = (scanMap.getEdgeSize() - 1) / 2;
 
-        for (int row = 0; row < scanMapTiles.length; row++)
-        {
-            for (int col = 0; col < scanMapTiles[row].length; col++) 
-             {
+        for (int row = 0; row < scanMapTiles.length; row++) {
+            for (int col = 0; col < scanMapTiles[row].length; col++) {
 
                 MapTile mapTile = scanMapTiles[col][row];
 
@@ -586,8 +432,8 @@ public class ROVER_01 {
             if (!globalMap.containsKey(coord)) {
                 MapTile tile = CommunicationHelper.convertToMapTile(jsonObj);
 
-                // if tile has science AND is not in ROCK
-                if (tile.getScience()== Science.CRYSTAL && tile.getTerrain() != Terrain.ROCK) {
+                // if tile has science AND is not in rock
+                if (tile.getScience() != Science.NONE && tile.getTerrain() != Terrain.ROCK ) {
 
                     // then add to the destination
                     if (!destinations.contains(coord) && !marked)
@@ -621,14 +467,14 @@ public class ROVER_01 {
             jsonEqListIn = "";
         }
         StringBuilder jsonEqList = new StringBuilder();
-        //System.out.println("ROVER_01 incomming EQUIPMENT result - first readline: " + jsonEqListIn);
+        //System.out.println("ROVER_01 incoming EQUIPMENT result - first readline: " + jsonEqListIn);
 
         if (jsonEqListIn.startsWith("EQUIPMENT")) {
             while (!(jsonEqListIn = in.readLine()).equals("EQUIPMENT_END")) {
                 if (jsonEqListIn == null) {
                     break;
                 }
-                //System.out.println("ROVER_01 incoming EQUIPMENT result: " + jsonEqListIn);
+                //System.out.println("ROVER_01 incomming EQUIPMENT result: " + jsonEqListIn);
                 jsonEqList.append(jsonEqListIn);
                 jsonEqList.append("\n");
                 //System.out.println("ROVER_01 doScan() bottom of while");
