@@ -448,7 +448,7 @@ public class ROVER_01 {
                 MapTile tile = CommunicationHelper.convertToMapTile(jsonObj);
 
                 // if tile has science AND is not in rock
-                if (tile.getScience() != Science.NONE && tile.getTerrain() != Terrain.ROCK ) {
+                if (tile.getScience()!= Science.CRYSTAL&& tile.getTerrain() != Terrain.ROCK ) {
 
                     // then add to the destination
                     if (!destinations.contains(coord) && !marked)
