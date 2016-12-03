@@ -161,7 +161,7 @@ public class ROVER_01 {
         long estimatedTime;
         long sleepTime2;
 
-        // Get destinations from Sensor group. I am a driller!
+       
         List<Coord> blockedDestinations = new ArrayList<>();
 
 
@@ -220,10 +220,12 @@ public class ROVER_01 {
                 updateglobalMap(com.getGlobalMap());
 
                 // ********* get closest destination from current location everytime
-                if (!destinations.isEmpty()) {
+                if (!destinations.isEmpty())
+                {
                     destination = getClosestDestination(currentLoc);
                     
-                }else{
+                }else
+                {
                 	destination = Randomove(currentLoc);
                 	com.postScanMapTiles(currentLoc, scanMapTiles);
                 }
@@ -301,7 +303,7 @@ public class ROVER_01 {
                     // 1. we are at the destination
                     // 2. blocked? error?
                 } else {
-                    // check if rover is at the destination, drill
+                   
                     if (currentLoc.equals(destination)) {
                         out.println("GATHER");
                         System.out.println(rovername + " arrived destination. Now gathering.");
@@ -396,7 +398,20 @@ public class ROVER_01 {
     		newcoord = new Coord(RX, RY);
     	} return newcoord;
     }
-
+ /*   private Coord Rover_03(Coord current)
+    {  
+      ROVER_03.updateDestinations();
+      int OX,OY;
+      public int maxX;
+      public int maxY; 
+	  ROVER_03 c=new ROVER_03();
+	  this.maxX=c.maxX;
+	  this.maxY=c.maxY;
+	  Coord newcoor= new Coord(OX,OY);
+	  return current;
+    	
+    }
+*/
     private void updateglobalMap(Coord currentLoc, MapTile[][] scanMapTiles) {
         int centerIndex = (scanMap.getEdgeSize() - 1) / 2;
 
@@ -433,7 +448,7 @@ public class ROVER_01 {
                 MapTile tile = CommunicationHelper.convertToMapTile(jsonObj);
 
                 // if tile has science AND is not in rock
-                if (tile.getScience() != Science.NONE && tile.getTerrain() != Terrain.ROCK ) {
+                if (tile.getScience()!= Science.CRYSTAL&& tile.getTerrain() != Terrain.ROCK ) {
 
                     // then add to the destination
                     if (!destinations.contains(coord) && !marked)
